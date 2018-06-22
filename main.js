@@ -29,6 +29,9 @@ Vue.component('timer', {
 					self.startTimer();
 					break;
 			
+				case 'playing':
+					self.stopTimer('Watch closely!');
+
 				default:
 					console.log("Timer: state changed to [" + $event + "]");
 			
@@ -86,7 +89,6 @@ var simon = new Vue({
 		start: function() {
 			this.isTimerActive = true;
 			this.playSequence();
-			this.$emit('stateChange', 'capturing');
 		},
 
 		captureTap(color) {
@@ -114,6 +116,8 @@ var simon = new Vue({
 
 			var self = this;
 
+			self.$emit('stateChange', 'playing');
+
 			self.playSequenceId = window.setInterval(function() {
 
 				self.currentButton = self.sequence[self.playSequenceCounter];
@@ -126,6 +130,8 @@ var simon = new Vue({
 						// Turn off the repeat
 						console.log("Ran out of sequence to display");
 						window.clearInterval(self.playSequenceId);
+
+						self.$emit('stateChange', 'capturing');
 
 					}
 
