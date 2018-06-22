@@ -15,13 +15,13 @@
 			<timer></timer>
 
 			<div class="row">
-				<div id="green" class="light col" v-on:click="captureTap('green')"></div>
-				<div id="red" class="light col" v-on:click="captureTap('red')"></div>
+				<div id="green" class="light col" v-on:click="captureTap('green')" v-bind:class="{ 'bright': currentButton === 'green' }"></div>
+				<div id="red" class="light col" v-on:click="captureTap('red')" v-bind:class="{ 'bright': currentButton === 'red' }"></div>
 			</div>
 
 			<div class="row">
-				<div id="yellow" class="light col" v-on:click="captureTap('yellow')"></div>
-				<div id="blue" class="light col" v-on:click="captureTap('blue')"></div>
+				<div id="yellow" class="light col" v-on:click="captureTap('yellow')" v-bind:class="{ 'bright': currentButton === 'yellow' }"></div>
+				<div id="blue" class="light col" v-on:click="captureTap('blue')" v-bind:class="{ 'bright': currentButton === 'blue' }"></div>
 			</div>
 
 			<div id="controls" class="row">
