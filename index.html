@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+	<title>Vue Simon</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+	<div id="app">
+
+		<h1>Vue Simon</h1>
+
+		<div id="simon">
+
+			<timer></timer>
+
+			<div class="row">
+				<div id="green" class="light col"></div>
+				<div id="red" class="light col"></div>
+			</div>
+
+			<div class="row">
+				<div id="yellow" class="light col"></div>
+				<div id="blue" class="light col"></div>
+			</div>
+
+			<div id="controls" class="row">
+				<div class="col">
+					<button class="start">Start</button>
+				</div>
+			</div>
+
+			<div id="history">
+				<p><strong>Current Sequence:</strong> {{ current }}</p>
+				<p><strong>Longest Sequence:</strong> {{ longest }}</p>
+			</div>
+
+		</div>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script src="main.js"></script>
+</body>
