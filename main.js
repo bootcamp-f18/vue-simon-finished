@@ -77,11 +77,12 @@ var simon = new Vue({
 		longest: 0,
 		current: 0,
 		isTimerActive: false,
-		sequence: [ 'red', 'yellow', 'green', 'green', 'blue' ],
+		sequence: [],
 		taps: [],
 		playSequenceId: null,
 		currentButton: '',
-		playSequenceCounter: 0
+		playSequenceCounter: 0,
+		lights: [ 'red', 'green', 'yellow', 'blue' ]
 	},
 
 	methods: {
@@ -91,7 +92,7 @@ var simon = new Vue({
 			this.playSequence();
 		},
 
-		captureTap(color) {
+		captureTap: function(color) {
 
 			if (this.isTimerActive) {
 
@@ -112,16 +113,17 @@ var simon = new Vue({
 			// emit another event
 		},
 
+		addToSequence: function() {
+			var index = Math.floor(Math.random() * 4);
+			this.sequence.push(this.lights[index]);
+		},
+
 		playSequence: function() {
-
 			var self = this;
-
+			self.addToSequence();
 			self.$emit('stateChange', 'playing');
-
 			self.playSequenceId = window.setInterval(function() {
-
 				self.currentButton = self.sequence[self.playSequenceCounter];
-
 				setTimeout(function() {
 					self.currentButton = '';
 					self.playSequenceCounter++;
@@ -134,13 +136,8 @@ var simon = new Vue({
 						self.$emit('stateChange', 'capturing');
 
 					}
-
 				}, 300);
-
 			}, 600);
-
-
-
 		}
 
 	}
