@@ -31,6 +31,15 @@ Vue.component('timer', {
 			
 				case 'playing':
 					self.stopTimer('Watch closely!');
+					break;
+
+				case 'goodjob':
+					self.stopTimer('Good job! Adding another light....');
+					break;
+
+				case 'gameover':
+					self.stopTimer('Oops, game over! Click Start to begin a new game!');
+					break;
 
 				default:
 					console.log("Timer: state changed to [" + $event + "]");
@@ -61,7 +70,8 @@ Vue.component('timer', {
 			console.log('Tick!');
 			this.remaining--;
 			if (this.remaining === 0) {
-				this.stopTimer('Time expired!');
+				this.stopTimer('Time expired! Click Start to begin a new game!');
+				this.$emit('expired');
 			} 
 		}
 
@@ -85,9 +95,22 @@ var simon = new Vue({
 		lights: [ 'red', 'green', 'yellow', 'blue' ]
 	},
 
+	created() {
+
+		this.$on('expired', function($event) {
+			this.gameOver();
+			this.taps = [];
+		
+			// TODO: update longest
+
+		});
+
+	},
+
 	methods: {
 
 		start: function() {
+			this.sequence = [];
 			this.isTimerActive = true;
 			this.playSequence();
 		},
@@ -99,18 +122,37 @@ var simon = new Vue({
 				// Yay! Process this tap!
 				this.$emit('stateChange', 'processing');
 
+				// light up the button
+				this.currentButton = color;
+				var self = this;
+				setTimeout(function() {
+					self.currentButton = '';
+				}, 300);
+
+				// Compare taps
+				var last_index = this.taps.length;
+				this.taps.push(color);
+				if (color === this.sequence[last_index]) {
+					
+					if (this.taps.length === this.sequence.length) {
+						this.taps = [];
+						this.$emit('stateChange', 'goodjob');
+						setTimeout(function() {
+							self.playSequence();
+						}, 1000);
+					}
+
+				}
+				else {
+					this.gameOver();
+				}
+
 			}
 			else {
 				// Not waiting for user input
 				// Ignore the tap
 			}
 
-
-			// push to an array?
-
-			// light up the button
-
-			// emit another event
 		},
 
 		addToSequence: function() {
@@ -132,12 +174,19 @@ var simon = new Vue({
 						// Turn off the repeat
 						console.log("Ran out of sequence to display");
 						window.clearInterval(self.playSequenceId);
-
+						self.playSequenceCounter = 0;
 						self.$emit('stateChange', 'capturing');
 
 					}
 				}, 300);
 			}, 600);
+		},
+
+		gameOver: function() {
+
+			console.log("Sorry, game over!");
+			this.$emit('stateChange', 'gameover');
+
 		}
 
 	}
