@@ -113,6 +113,7 @@ var simon = new Vue({
 			this.sequence = [];
 			this.isTimerActive = true;
 			this.playSequence();
+			this.current = 0;
 		},
 
 		captureTap: function(color) {
@@ -137,6 +138,10 @@ var simon = new Vue({
 					if (this.taps.length === this.sequence.length) {
 						this.taps = [];
 						this.$emit('stateChange', 'goodjob');
+						this.current = this.sequence.length;
+						if (this.longest < this.sequence.length) {
+							this.longest = this.sequence.length;
+						}
 						setTimeout(function() {
 							self.playSequence();
 						}, 1000);
