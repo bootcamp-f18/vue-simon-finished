@@ -28,7 +28,7 @@ Vue.component('timer', {
 					console.log("Timer: state changed to [" + $event + "]");
 			
 			}
-			
+
 		});
 	},
 
@@ -46,6 +46,7 @@ Vue.component('timer', {
 			window.clearInterval(this.intervalId);
 			this.message = text;
 			this.remaining = '';
+			this.intervalId = null;
 		},
 
 		tick: function() {
