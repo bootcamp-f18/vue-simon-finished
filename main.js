@@ -23,6 +23,11 @@ Vue.component('timer', {
 				case 'capturing': 
 					self.startTimer();
 					break;
+
+				case 'processing':
+					self.stopTimer('Yikes! You tapped a light!');
+					self.startTimer();
+					break;
 			
 				default:
 					console.log("Timer: state changed to [" + $event + "]");
@@ -67,15 +72,36 @@ var simon = new Vue({
 
 	data: {
 		longest: 0,
-		current: 0
+		current: 0,
+		isTimerActive: false
 	},
 
 	methods: {
 
 		start: function() {
-
+			this.isTimerActive = true;
 			this.$emit('stateChange', 'capturing');
+		},
 
+		captureTap(color) {
+
+			if (this.isTimerActive) {
+
+				// Yay! Process this tap!
+				this.$emit('stateChange', 'processing');
+
+			}
+			else {
+				// Not waiting for user input
+				// Ignore the tap
+			}
+
+
+			// push to an array?
+
+			// light up the button
+
+			// emit another event
 		}
 
 	}
