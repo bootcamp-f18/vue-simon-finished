@@ -19,8 +19,8 @@ Vue.component('timer', {
 		this.$parent.$on('stateChange', function($event) {
 
 			switch($event) {
-			
-				case 'capturing': 
+
+				case 'capturing':
 					self.startTimer();
 					break;
 
@@ -28,7 +28,7 @@ Vue.component('timer', {
 					self.stopTimer('Yikes! You tapped a light!');
 					self.startTimer();
 					break;
-			
+
 				case 'playing':
 					self.stopTimer('Watch closely!');
 					break;
@@ -43,7 +43,7 @@ Vue.component('timer', {
 
 				default:
 					console.log("Timer: state changed to [" + $event + "]");
-			
+
 			}
 
 		});
@@ -71,8 +71,8 @@ Vue.component('timer', {
 			this.remaining--;
 			if (this.remaining === 0) {
 				this.stopTimer('Time expired! Click Start to begin a new game!');
-				this.$emit('expired');
-			} 
+				this.$parent.$emit('expired');
+			}
 		}
 
 	}
@@ -97,10 +97,11 @@ var simon = new Vue({
 
 	created() {
 
-		this.$on('expired', function($event) {
-			this.gameOver();
-			this.taps = [];
-		
+		var self = this;
+
+		self.$on('expired', function($event) {
+			self.gameOver();
+			self.taps = [];
 			// TODO: update longest
 
 		});
@@ -114,6 +115,8 @@ var simon = new Vue({
 			this.isTimerActive = true;
 			this.playSequence();
 			this.current = 0;
+			this.taps = [];
+
 		},
 
 		captureTap: function(color) {
@@ -134,7 +137,7 @@ var simon = new Vue({
 				var last_index = this.taps.length;
 				this.taps.push(color);
 				if (color === this.sequence[last_index]) {
-					
+
 					if (this.taps.length === this.sequence.length) {
 						this.taps = [];
 						this.$emit('stateChange', 'goodjob');
@@ -156,6 +159,7 @@ var simon = new Vue({
 			else {
 				// Not waiting for user input
 				// Ignore the tap
+				console.log("Ignoring tap!");
 			}
 
 		},
